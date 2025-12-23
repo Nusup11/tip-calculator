@@ -7,7 +7,7 @@ export default function App() {
   const [people, setPeople] = useState(1)
   const [rounding, setRounding] = useState('none')
 
-  const tipPercent = custom ? Number(custom) : percent
+  const tipPercent = custom && custom.trim() !== '' ? Number(custom) : percent
   const billNum = Number(bill) || 0
   const tip = billNum * tipPercent / 100
   const total = billNum + tip
@@ -96,15 +96,19 @@ export default function App() {
             >
               Custom
             </button>
-            {custom && (
-              <input
-                type="number"
-                className="w-full border border-gray-300 p-3 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                placeholder="Введите процент"
-          value={custom}
-                onChange={e => setCustom(e.target.value)}
-              />
-            )}
+            <input
+              type="number"
+              className="w-full border border-gray-300 p-3 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Введите процент (например: 12.5)"
+              value={custom}
+              onChange={e => {
+                const value = e.target.value
+                setCustom(value)
+                if (value) {
+                  setPercent(15) // Сбрасываем стандартный процент при вводе кастомного
+                }
+              }}
+            />
           </div>
 
           {/* Количество людей */}
